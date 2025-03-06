@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Resume Builder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --dark: #212529;
+            --light: #f8f9fa;
+        }
+        
+        /* For regular view */
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .repeater-item {
+            position: relative;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        
+        /* For print/PDF view */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            
+            .cv-preview {
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+                color: black !important;
+            }
+            
+            .preview-header {
+                color: black !important;
+                border-bottom: 1px solid black !important;
+            }
+            
+            .preview-section {
+                color: black !important;
+            }
+            
+            .preview-section h3 {
+                color: black !important;
+                border-bottom: 1px solid black !important;
+            }
+            
+            .print-exclude {
+                display: none !important;
+            }
+            
+            a {
+                color: black !important;
+                text-decoration: none !important;
+            }
+            
+            /* Remove all background colors */
+            * {
+                background-color: white !important;
+            }
+        }
+
+        .cv-preview {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .preview-section {
+            margin-bottom: 25px;
+        }
+        
+        .preview-section h3 {
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <span class="fw-bold">Resume<span class="text-primary">Builder</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Form Section -->
+            <div class="col-lg-7 print-exclude">
+                <form id="cv-form" class="mb-5">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">Personal Information</h3>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control firstname" placeholder="e.g. John" onkeyup="generateCV()">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Middle Name <small class="text-muted">(optional)</small></label>
+                                <input type="text" class="form-control middlename" placeholder="e.g. Herbert" onkeyup="generateCV()">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control lastname" placeholder="e.g. Doe" onkeyup="generateCV()">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control email" placeholder="e.g. johndoe@gmail.com" onkeyup="generateCV()">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control phoneno" placeholder="e.g. 456-768-798" onkeyup="generateCV()">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Designation</label>
+                                <input type="text" class="form-control designation" placeholder="e.g. Senior Developer" onkeyup="generateCV()">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control address" placeholder="e.g. Lake Street 23" onkeyup="generateCV()">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Professional Summary</label>
+                                <textarea class="form-control summary" rows="3" placeholder="Brief professional summary" onkeyup="generateCV()"></textarea>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Profile Photo</label>
+                                <input type="file" class="form-control image" accept="image/*" onchange="previewImage()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Skills</h3>
+                        <div id="skills-repeater" class="repeater">
+                            <div data-repeater-list="skillsList">
+                                <div data-repeater-item class="repeater-item">
+                                    <div class="row align-items-center">
+                                        <div class="col-10">
+                                            <label class="form-label">Skill</label>
+                                            <input type="text" class="form-control skill" placeholder="e.g. JavaScript" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" data-repeater-delete class="btn btn-danger btn-sm remove-btn">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" data-repeater-create class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Add Skill
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Experience</h3>
+                        <div id="experience-repeater" class="repeater">
+                            <div data-repeater-list="experienceList">
+                                <div data-repeater-item class="repeater-item">
+                                    <button type="button" data-repeater-delete class="btn btn-danger btn-sm remove-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Job Title</label>
+                                            <input type="text" class="form-control exp_title" placeholder="e.g. Senior Developer" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company/Organization</label>
+                                            <input type="text" class="form-control exp_organization" placeholder="e.g. Google Inc." onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" class="form-control exp_start_date" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control exp_end_date" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Location</label>
+                                            <input type="text" class="form-control exp_location" placeholder="e.g. New York, NY" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control exp_description" rows="3" placeholder="Job description and responsibilities" onkeyup="generateCV()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" data-repeater-create class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Add Experience
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Education Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Education</h3>
+                        <div id="education-repeater" class="repeater">
+                            <div data-repeater-list="educationList">
+                                <div data-repeater-item class="repeater-item">
+                                    <button type="button" data-repeater-delete class="btn btn-danger btn-sm remove-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">School/University</label>
+                                            <input type="text" class="form-control edu_school" placeholder="e.g. Harvard University" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Degree</label>
+                                            <input type="text" class="form-control edu_degree" placeholder="e.g. Bachelor of Science" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" class="form-control edu_start_date" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control edu_graduation_date" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">City</label>
+                                            <input type="text" class="form-control edu_city" placeholder="e.g. Cambridge, MA" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control edu_description" rows="3" placeholder="Additional information" onkeyup="generateCV()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" data-repeater-create class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Add Education
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Projects Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Projects</h3>
+                        <div id="projects-repeater" class="repeater">
+                            <div data-repeater-list="projectsList">
+                                <div data-repeater-item class="repeater-item">
+                                    <button type="button" data-repeater-delete class="btn btn-danger btn-sm remove-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Project Name</label>
+                                            <input type="text" class="form-control proj_title" placeholder="e.g. E-commerce Website" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Project Link</label>
+                                            <input type="text" class="form-control proj_link" placeholder="e.g. https://github.com/project" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control proj_description" rows="3" placeholder="Project description and your role" onkeyup="generateCV()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" data-repeater-create class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Add Project
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Achievements Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Achievements</h3>
+                        <div id="achievements-repeater" class="repeater">
+                            <div data-repeater-list="achievementsList">
+                                <div data-repeater-item class="repeater-item">
+                                    <button type="button" data-repeater-delete class="btn btn-danger btn-sm remove-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control achieve_title" placeholder="e.g. Employee of the Year" onkeyup="generateCV()">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control achieve_description" rows="3" placeholder="Achievement details" onkeyup="generateCV()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" data-repeater-create class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Add Achievement
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mb-5">
+                        <button type="button" class="btn btn-primary btn-lg" onclick="printCV()">
+                            <i class="fas fa-print me-2"></i>Print CV
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Preview Section (Black and White for Print) -->
+            <div class="col-lg-5 print-area">
+                <div class="cv-preview mb-5">
+                    <div class="preview-header text-center mb-4">
+                        <div class="row">
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                                <img src="" alt="" id="image_dsp" class="img-fluid rounded-circle" style="max-width: 100px; max-height: 100px; display: none;">
+                            </div>
+                            <div class="col-9">
+                                <h2 class="mb-0 fw-bold" id="fullname_dsp"></h2>
+                                <p class="text-uppercase mb-1" id="designation_dsp"></p>
+                                <div class="d-flex flex-wrap justify-content-center gap-3 small">
+                                    <span id="email_dsp"></span>
+                                    <span id="phoneno_dsp"></span>
+                                    <span id="address_dsp"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <div id="summary_dsp" class="mb-3"></div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3>Skills</h3>
+                        <div class="d-flex flex-wrap gap-2" id="skills_dsp"></div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3>Experience</h3>
+                        <div id="experiences_dsp"></div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3>Education</h3>
+                        <div id="educations_dsp"></div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3>Projects</h3>
+                        <div id="projects_dsp"></div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3>Achievements</h3>
+                        <div id="achievements_dsp"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- jQuery Repeater -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script>
+    
+    <script>
+        // Initialize repeaters
+        $(document).ready(function () {
+            $('#skills-repeater, #experience-repeater, #education-repeater, #projects-repeater, #achievements-repeater').repeater({
+                initEmpty: false,
+                show: function () {
+                    $(this).slideDown();
+                    generateCV();
+                },
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
+                    generateCV();
+                }
+            });
+        });
+        
+        // Preview image
+        function previewImage() {
+            const fileInput = document.querySelector('.image');
+            const imagePreview = document.getElementById('image_dsp');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+        
+        // Generate CV function
+        function generateCV() {
+            // Personal information
+            const firstName = document.querySelector('.firstname').value || '';
+            const middleName = document.querySelector('.middlename').value || '';
+            const lastName = document.querySelector('.lastname').value || '';
+            const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
+            document.getElementById('fullname_dsp').textContent = fullName;
+            
+            document.getElementById('designation_dsp').textContent = document.querySelector('.designation').value || '';
+            document.getElementById('email_dsp').innerHTML = document.querySelector('.email').value ? '<i class="fas fa-envelope me-1"></i>' + document.querySelector('.email').value : '';
+            document.getElementById('phoneno_dsp').innerHTML = document.querySelector('.phoneno').value ? '<i class="fas fa-phone me-1"></i>' + document.querySelector('.phoneno').value : '';
+            document.getElementById('address_dsp').innerHTML = document.querySelector('.address').value ? '<i class="fas fa-map-marker-alt me-1"></i>' + document.querySelector('.address').value : '';
+            document.getElementById('summary_dsp').textContent = document.querySelector('.summary').value || '';
+            
+            // Skills
+            const skillsContainer = document.getElementById('skills_dsp');
+            skillsContainer.innerHTML = '';
+            document.querySelectorAll('.skill').forEach(skill => {
+                if (skill.value) {
+                    const skillBadge = document.createElement('span');
+                    skillBadge.className = 'badge bg-light text-dark border border-secondary';
+                    skillBadge.textContent = skill.value;
+                    skillsContainer.appendChild(skillBadge);
+                }
+            });
+            
+            // Experience
+            const experiencesContainer = document.getElementById('experiences_dsp');
+            experiencesContainer.innerHTML = '';
+            document.querySelectorAll('.exp_title').forEach((title, index) => {
+                if (title.value) {
+                    const company = document.querySelectorAll('.exp_organization')[index]?.value || '';
+                    const location = document.querySelectorAll('.exp_location')[index]?.value || '';
+                    const startDate = document.querySelectorAll('.exp_start_date')[index]?.value || '';
+                    const endDate = document.querySelectorAll('.exp_end_date')[index]?.value || '';
+                    const description = document.querySelectorAll('.exp_description')[index]?.value || '';
+                    
+                    const dateText = startDate || endDate ? `${formatDate(startDate)} - ${formatDate(endDate) || 'Present'}` : '';
+                    
+                    const expItem = document.createElement('div');
+                    expItem.className = 'mb-3';
+                    expItem.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-0">${title.value}</h5>
+                                <p class="mb-0">${company}${location ? ` - ${location}` : ''}</p>
+                            </div>
+                            <span class="text-muted small">${dateText}</span>
+                        </div>
+                        <p class="mt-1 mb-0">${description}</p>
+                    `;
+                    experiencesContainer.appendChild(expItem);
+                }
+            });
+            
+            // Education
+            const educationsContainer = document.getElementById('educations_dsp');
+            educationsContainer.innerHTML = '';
+            document.querySelectorAll('.edu_school').forEach((school, index) => {
+                if (school.value) {
+                    const degree = document.querySelectorAll('.edu_degree')[index]?.value || '';
+                    const city = document.querySelectorAll('.edu_city')[index]?.value || '';
+                    const startDate = document.querySelectorAll('.edu_start_date')[index]?.value || '';
+                    const endDate = document.querySelectorAll('.edu_graduation_date')[index]?.value || '';
+                    const description = document.querySelectorAll('.edu_description')[index]?.value || '';
+                    
+                    const dateText = startDate || endDate ? `${formatDate(startDate)} - ${formatDate(endDate) || 'Present'}` : '';
+                    
+                    const eduItem = document.createElement('div');
+                    eduItem.className = 'mb-3';
+                    eduItem.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-0">${degree}</h5>
+                                <p class="mb-0">${school.value}${city ? ` - ${city}` : ''}</p>
+                            </div>
+                            <span class="text-muted small">${dateText}</span>
+                        </div>
+                        <p class="mt-1 mb-0">${description}</p>
+                    `;
+                    educationsContainer.appendChild(eduItem);
+                }
+            });
+            
+            // Projects
+            const projectsContainer = document.getElementById('projects_dsp');
+            projectsContainer.innerHTML = '';
+            document.querySelectorAll('.proj_title').forEach((title, index) => {
+                if (title.value) {
+                    const link = document.querySelectorAll('.proj_link')[index]?.value || '';
+                    const description = document.querySelectorAll('.proj_description')[index]?.value || '';
+                    
+                    const projItem = document.createElement('div');
+                    projItem.className = 'mb-3';
+                    projItem.innerHTML = `
+                        <h5 class="mb-0">${title.value}</h5>
+                        ${link ? `<a href="${link}" class="small">${link}</a>` : ''}
+                        <p class="mt-1 mb-0">${description}</p>
+                    `;
+                    projectsContainer.appendChild(projItem);
+                }
+            });
+            
+            // Achievements
+            const achievementsContainer = document.getElementById('achievements_dsp');
+            achievementsContainer.innerHTML = '';
+            document.querySelectorAll('.achieve_title').forEach((title, index) => {
+                if (title.value) {
+                    const description = document.querySelectorAll('.achieve_description')[index]?.value || '';
+                    
+                    const achieveItem = document.createElement('div');
+                    achieveItem.className = 'mb-3';
+                    achieveItem.innerHTML = `
+                        <h5 class="mb-0">${title.value}</h5>
+                        <p class="mt-1 mb-0">${description}</p>
+                    `;
+                    achievementsContainer.appendChild(achieveItem);
+                }
+            });
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+        }
+        
+        // Print CV function
+        function printCV() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
