@@ -99,9 +99,27 @@
                 text-decoration: none !important;
             }
             
-            /* Remove all background colors */
+            /* Remove all background colors for ATS compatibility */
             * {
                 background-color: white !important;
+            }
+            
+            /* Hide headers, footers, date, time and filename when printing */
+            @page {
+                margin: 0.5cm;
+                size: auto;
+            }
+            
+            @page :first {
+                margin-top: 0;
+            }
+            
+            @page :left {
+                margin-left: 0;
+            }
+            
+            @page :right {
+                margin-right: 0;
             }
         }
 
@@ -124,18 +142,19 @@
             margin-bottom: 15px;
             font-weight: 600;
         }
+        
+        /* ATS-friendly styles */
+        .cv-preview {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.5;
+        }
+        
+        .cv-preview h2, .cv-preview h3, .cv-preview h4, .cv-preview h5 {
+            font-family: Arial, Helvetica, sans-serif;
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <span class="fw-bold">Resume<span class="text-primary">Builder</span></span>
-            </a>
-        </div>
-    </nav>
 
     <div class="container my-5">
         <div class="row">
@@ -165,7 +184,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Phone</label>
-                                <input type="text" class="form-control phoneno" placeholder="e.g. 456-768-798" onkeyup="generateCV()">
+                                <input type="text" class="form-control phoneno" placeholder="e.g. 98XXXXXXXX" maxlength="10" onkeyup="validatePhone(this); generateCV()">
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
                             </div>
                             
                             <div class="col-md-6">
@@ -174,17 +194,12 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Address</label>
-                                <input type="text" class="form-control address" placeholder="e.g. Lake Street 23" onkeyup="generateCV()">
+                                <input type="text" class="form-control address" placeholder="e.g. Bangalore, Karnataka" onkeyup="generateCV()">
                             </div>
                             
                             <div class="col-12">
                                 <label class="form-label">Professional Summary</label>
                                 <textarea class="form-control summary" rows="3" placeholder="Brief professional summary" onkeyup="generateCV()"></textarea>
-                            </div>
-                            
-                            <div class="col-12">
-                                <label class="form-label">Profile Photo</label>
-                                <input type="file" class="form-control image" accept="image/*" onchange="previewImage()">
                             </div>
                         </div>
                     </div>
@@ -234,15 +249,15 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Start Date</label>
-                                            <input type="date" class="form-control exp_start_date" onkeyup="generateCV()">
+                                            <input type="date" class="form-control exp_start_date" onchange="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">End Date</label>
-                                            <input type="date" class="form-control exp_end_date" onkeyup="generateCV()">
+                                            <input type="date" class="form-control exp_end_date" onchange="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Location</label>
-                                            <input type="text" class="form-control exp_location" placeholder="e.g. New York, NY" onkeyup="generateCV()">
+                                            <input type="text" class="form-control exp_location" placeholder="e.g. Bangalore, Karnataka" onkeyup="generateCV()">
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">Description</label>
@@ -269,23 +284,23 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label class="form-label">School/University</label>
-                                            <input type="text" class="form-control edu_school" placeholder="e.g. Harvard University" onkeyup="generateCV()">
+                                            <input type="text" class="form-control edu_school" placeholder="e.g. Indian Institute of Technology" onkeyup="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Degree</label>
-                                            <input type="text" class="form-control edu_degree" placeholder="e.g. Bachelor of Science" onkeyup="generateCV()">
+                                            <input type="text" class="form-control edu_degree" placeholder="e.g. Bachelor of Technology" onkeyup="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Start Date</label>
-                                            <input type="date" class="form-control edu_start_date" onkeyup="generateCV()">
+                                            <input type="date" class="form-control edu_start_date" onchange="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">End Date</label>
-                                            <input type="date" class="form-control edu_graduation_date" onkeyup="generateCV()">
+                                            <input type="date" class="form-control edu_graduation_date" onchange="generateCV()">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">City</label>
-                                            <input type="text" class="form-control edu_city" placeholder="e.g. Cambridge, MA" onkeyup="generateCV()">
+                                            <input type="text" class="form-control edu_city" placeholder="e.g. Mumbai, Maharashtra" onkeyup="generateCV()">
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">Description</label>
@@ -360,28 +375,23 @@
                     
                     <div class="text-center mb-5">
                         <button type="button" class="btn btn-primary btn-lg" onclick="printCV()">
-                            <i class="fas fa-print me-2"></i>Print CV
+                            <i class="fas fa-download me-2"></i>Download Resume
                         </button>
                     </div>
                 </form>
             </div>
             
-            <!-- Preview Section (Black and White for Print) -->
+            <!-- Preview Section (ATS-Friendly Format) -->
             <div class="col-lg-5 print-area">
                 <div class="cv-preview mb-5">
-                    <div class="preview-header text-center mb-4">
-                        <div class="row">
-                            <div class="col-3 d-flex justify-content-center align-items-center">
-                                <img src="" alt="" id="image_dsp" class="img-fluid rounded-circle" style="max-width: 100px; max-height: 100px; display: none;">
-                            </div>
-                            <div class="col-9">
-                                <h2 class="mb-0 fw-bold" id="fullname_dsp"></h2>
-                                <p class="text-uppercase mb-1" id="designation_dsp"></p>
-                                <div class="d-flex flex-wrap justify-content-center gap-3 small">
-                                    <span id="email_dsp"></span>
-                                    <span id="phoneno_dsp"></span>
-                                    <span id="address_dsp"></span>
-                                </div>
+                    <div class="preview-header mb-4">
+                        <div class="text-center">
+                            <h2 class="mb-0 fw-bold" id="fullname_dsp"></h2>
+                            <p class="text-uppercase mb-1" id="designation_dsp"></p>
+                            <div class="d-flex flex-wrap justify-content-center gap-3 small">
+                                <span id="email_dsp"></span>
+                                <span id="phoneno_dsp"></span>
+                                <span id="address_dsp"></span>
                             </div>
                         </div>
                     </div>
@@ -392,7 +402,7 @@
                     
                     <div class="preview-section">
                         <h3>Skills</h3>
-                        <div class="d-flex flex-wrap gap-2" id="skills_dsp"></div>
+                        <div id="skills_dsp"></div>
                     </div>
                     
                     <div class="preview-section">
@@ -442,21 +452,18 @@
             });
         });
         
-        // Preview image
-        function previewImage() {
-            const fileInput = document.querySelector('.image');
-            const imagePreview = document.getElementById('image_dsp');
+        // Validate phone number (10 digits only)
+        function validatePhone(input) {
+            const value = input.value.replace(/\D/g, ''); // Remove non-digits
             
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                }
-                
-                reader.readAsDataURL(fileInput.files[0]);
+            if (value.length > 0 && !/^\d{10}$/.test(value)) {
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
             }
+            
+            // Enforce 10-digit limit by updating the input value
+            input.value = value.substring(0, 10);
         }
         
         // Generate CV function
@@ -470,21 +477,28 @@
             
             document.getElementById('designation_dsp').textContent = document.querySelector('.designation').value || '';
             document.getElementById('email_dsp').innerHTML = document.querySelector('.email').value ? '<i class="fas fa-envelope me-1"></i>' + document.querySelector('.email').value : '';
-            document.getElementById('phoneno_dsp').innerHTML = document.querySelector('.phoneno').value ? '<i class="fas fa-phone me-1"></i>' + document.querySelector('.phoneno').value : '';
+            
+            // Format phone number with Indian style (+91)
+            const phoneNo = document.querySelector('.phoneno').value;
+            document.getElementById('phoneno_dsp').innerHTML = phoneNo ? '<i class="fas fa-phone me-1"></i>+91 ' + phoneNo : '';
+            
             document.getElementById('address_dsp').innerHTML = document.querySelector('.address').value ? '<i class="fas fa-map-marker-alt me-1"></i>' + document.querySelector('.address').value : '';
             document.getElementById('summary_dsp').textContent = document.querySelector('.summary').value || '';
             
-            // Skills
+            // Skills - make it ATS friendly by using comma-separated list
             const skillsContainer = document.getElementById('skills_dsp');
             skillsContainer.innerHTML = '';
+            
+            const skillValues = [];
             document.querySelectorAll('.skill').forEach(skill => {
                 if (skill.value) {
-                    const skillBadge = document.createElement('span');
-                    skillBadge.className = 'badge bg-light text-dark border border-secondary';
-                    skillBadge.textContent = skill.value;
-                    skillsContainer.appendChild(skillBadge);
+                    skillValues.push(skill.value.trim());
                 }
             });
+            
+            if (skillValues.length > 0) {
+                skillsContainer.textContent = skillValues.join(', ');
+            }
             
             // Experience
             const experiencesContainer = document.getElementById('experiences_dsp');
@@ -588,8 +602,16 @@
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
         }
         
-        // Print CV function
+        // Print CV function with ATS-friendly settings
         function printCV() {
+            // Check for phone number validation
+            const phoneInput = document.querySelector('.phoneno');
+            if (phoneInput.value && !/^\d{10}$/.test(phoneInput.value)) {
+                alert('Please enter a valid 10-digit phone number.');
+                phoneInput.focus();
+                return;
+            }
+            
             window.print();
         }
     </script>
